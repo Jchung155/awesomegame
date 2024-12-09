@@ -21,7 +21,9 @@ public class PlayerScript : MonoBehaviour
     
     //This is how many points we currently have
     public int Score = 0;
-    
+
+    public float jumpSpeed = 10;
+
     //Start automatically gets triggered once when the objects turns on/the game starts
     void Start()
     {
@@ -35,7 +37,7 @@ public class PlayerScript : MonoBehaviour
     {
         //The code below controls the character's movement
         //First we make a variable that we'll use to record how we want to move
-        Vector2 vel = new Vector2(0,0);
+        Vector2 vel = new Vector2(0, RB.velocityY);
         
         //Then we use if statement to figure out what that variable should look like
         
@@ -49,7 +51,12 @@ public class PlayerScript : MonoBehaviour
         {
             vel.x = -Speed;
         }
-        //If I hold the up arrow, the player should move up. . .
+        if (Input.GetKey(KeyCode.Space))
+        {
+
+            vel.y = jumpSpeed;
+        }
+        /*If I hold the up arrow, the player should move up. . .
         if (Input.GetKey(KeyCode.W))
         {
             vel.y = Speed;
@@ -59,7 +66,7 @@ public class PlayerScript : MonoBehaviour
         {
             vel.y = -Speed;
         }
-        
+        */
         //Finally, I take that variable and I feed it to the component in charge of movement
         RB.velocity = vel;
 
