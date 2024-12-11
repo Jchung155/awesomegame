@@ -53,7 +53,7 @@ public class PlayerScript : MonoBehaviour
         Vector3 mousePos = (Vector2)cam.ScreenToWorldPoint(Input.mousePosition);
         //The code below controls the character's movement
         //First we make a variable that we'll use to record how we want to move
-        Vector2 vel = new Vector2(0, RB.velocityY);
+        Vector2 vel = new Vector2(0, RB.velocity.y);
         
         //Then we use if statement to figure out what that variable should look like
         
@@ -69,7 +69,7 @@ public class PlayerScript : MonoBehaviour
             vel.x = -Speed;
             GetComponent<SpriteRenderer>().flipX = true;
         }
-        if (RB.velocityX == 0)
+        if (RB.velocity.x == 0)
         {
             gameObject.GetComponent<Animator>().ResetTrigger("Run");
             gameObject.GetComponent<Animator>().SetTrigger("Idle");
@@ -80,7 +80,7 @@ public class PlayerScript : MonoBehaviour
             gameObject.GetComponent<Animator>().ResetTrigger("Idle");
 
         }
-        if (Input.GetKey(KeyCode.Space) && RB.velocityY == 0)
+        if (Input.GetKey(KeyCode.Space) && RB.velocity.y == 0)
         {
 
             vel.y = jumpSpeed;
@@ -146,7 +146,7 @@ public class PlayerScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        //This checks to see if the thing you bumped into has the CoinScript script on it
+        //This checks to see if the thing you bumped into ha the CoinScript script on it
         CoinScript coin = other.gameObject.GetComponent<CoinScript>();
         //If it does, run the code block belows
         if (coin != null)
