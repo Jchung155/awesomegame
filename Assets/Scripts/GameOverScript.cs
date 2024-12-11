@@ -15,7 +15,7 @@ public class GameOverScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             //Then load the 'Example 3' scene
-            SceneManager.LoadScene("Example 3");
+            SceneManager.LoadScene("PLAY THIS SCENE");
         }
     }
 }

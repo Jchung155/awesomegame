@@ -11,6 +11,8 @@ public class slashscript : MonoBehaviour
     public float lastSlashTime;
     public float slashDelay = 100;
 
+    public float slashTimer = 0.2f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,26 +25,7 @@ public class slashscript : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetMouseButtonDown(1))
-        {
-            if (portalTimer == 0)
-            {
-                // instantiate first.
-            }
-
-            if (portalTimer == 1)
-            {
-                // instantiate second.
-            }
-
-            if (portalTimer == 2)
-            {
-                //destroy both
-                portalTimer = 0;
-            }
-            else portalTimer++;
-
-        }
+      
         if (Input.GetMouseButtonDown(0))
         {
             if (Time.time >= lastSlashTime)
@@ -56,9 +39,14 @@ public class slashscript : MonoBehaviour
                 float deg = (180 / Mathf.PI) * angle;
                 gameObject.transform.rotation = Quaternion.Euler(0f, 0f, deg);
 
-
             }
         }
+        if (Time.time >= lastSlashTime+slashTimer)
+        {
+            transform.position = new Vector3(1000, 1000, 0);
+        }
+
+        
 
     }
 

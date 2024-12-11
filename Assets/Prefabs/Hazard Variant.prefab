@@ -85,7 +85,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RB: {fileID: 6644270849354213090}
-  player: {fileID: 0}
+  player: {fileID: 445831227596155269, guid: 5465daea84a2bcb43acd34cbcbb9c9ae, type: 3}
   speed: 0.4
 --- !u!50 &6644270849354213090
 Rigidbody2D:

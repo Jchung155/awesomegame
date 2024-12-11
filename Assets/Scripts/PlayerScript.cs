@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -24,17 +25,32 @@ public class PlayerScript : MonoBehaviour
 
     public float jumpSpeed = 10;
 
+    public GameObject portal1;
+    public GameObject portal2;
+    private Camera cam;
+    public int portalTimer;
+    public GameObject background;
+
+    Animator m_Animator;
+
     //Start automatically gets triggered once when the objects turns on/the game starts
     void Start()
     {
         //During setup we call UpdateScore to make sure our score text looks correct
-        UpdateScore();
+       // UpdateScore();
+        cam = Camera.main;
+        portal1.transform.position = new Vector3(1000, 1000, 0);
+        portal2.transform.position = new Vector3(1000, 1000, 0);
+
+
     }
 
     //Update is a lot like Start, but it automatically gets triggered once per frame
     //Most of an object's code will be called from Update--it controls things that happen in real time
     void Update()
     {
+        background.transform.position = new Vector3(transform.position.x, transform.position.y+3, 2);
+        Vector3 mousePos = (Vector2)cam.ScreenToWorldPoint(Input.mousePosition);
         //The code below controls the character's movement
         //First we make a variable that we'll use to record how we want to move
         Vector2 vel = new Vector2(0, RB.velocityY);
@@ -45,13 +61,26 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKey(KeyCode.D))
         {
             vel.x = Speed;
+            GetComponent<SpriteRenderer>().flipX = false;
         }
         //If I hold the left arrow, the player should move left. . .
         if (Input.GetKey(KeyCode.A))
         {
             vel.x = -Speed;
+            GetComponent<SpriteRenderer>().flipX = true;
         }
-        if (Input.GetKey(KeyCode.Space))
+        if (RB.velocityX == 0)
+        {
+            gameObject.GetComponent<Animator>().ResetTrigger("Run");
+            gameObject.GetComponent<Animator>().SetTrigger("Idle");
+        }
+        else
+        {
+            gameObject.GetComponent<Animator>().SetTrigger("Run");
+            gameObject.GetComponent<Animator>().ResetTrigger("Idle");
+
+        }
+        if (Input.GetKey(KeyCode.Space) && RB.velocityY == 0)
         {
 
             vel.y = jumpSpeed;
@@ -70,10 +99,35 @@ public class PlayerScript : MonoBehaviour
         //Finally, I take that variable and I feed it to the component in charge of movement
         RB.velocity = vel;
 
-        if (gameObject.transform.position.x > 12) { gameObject.transform.position = new Vector2(-10, gameObject.transform.position.y); }
-        if (gameObject.transform.position.x < -12) { gameObject.transform.position = new Vector2(10, gameObject.transform.position.y); }
-        if (gameObject.transform.position.y < -7) { gameObject.transform.position = new Vector2(gameObject.transform.position.x, 6); }
-        if (gameObject.transform.position.y > 7) { gameObject.transform.position = new Vector2(gameObject.transform.position.x, -6); }
+        //if (gameObject.transform.position.x > 12) { gameObject.transform.position = new Vector2(-10, gameObject.transform.position.y); }
+        //if (gameObject.transform.position.x < -12) { gameObject.transform.position = new Vector2(10, gameObject.transform.position.y); }
+        //if (gameObject.transform.position.y < -7) { gameObject.transform.position = new Vector2(gameObject.transform.position.x, 6); }
+        //if (gameObject.transform.position.y > 7) { gameObject.transform.position = new Vector2(gameObject.transform.position.x, -6); }
+
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (portalTimer == 0)
+            {
+                // instantiate first.
+                portal1.transform.position = mousePos;
+            }
+
+            if (portalTimer == 1)
+            {
+                portal2.transform.position = mousePos;
+            }
+
+            if (portalTimer == 2)
+            {
+                portal1.transform.position = new Vector3(1000, 1000, 0);
+                portal2.transform.position = new Vector3(1000, 1000, 0);
+                //destroy both
+                portalTimer = 0;
+            }
+            else portalTimer++;
+
+        }
     }
 
     //This gets called whenever you bump into another object, like a wall or coin.
@@ -103,6 +157,17 @@ public class PlayerScript : MonoBehaviour
             Score++;
             //And then update the game's score text
             UpdateScore();
+        }
+
+        if (other.gameObject.CompareTag("Hazard"))
+        {
+            //Run your 'you lose' function!
+            Die();
+        }
+
+        if (other.gameObject.CompareTag("Portal") && portalTimer == 2)
+        {
+            transform.position = portal2.transform.position;
         }
     }
 
